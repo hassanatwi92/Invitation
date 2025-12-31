@@ -45,13 +45,15 @@ p {
 
 /* ===== الأزرار ===== */
 button {
-    background: transparent;
+    background: rgba(0,0,0,0.5);
     border: 1px solid white;
     color: white;
     padding: 15px 35px;
     font-size: 20px;
     border-radius: 30px;
     cursor: pointer;
+    z-index: 2;
+    position: relative;
 }
 
 .nav-buttons {
@@ -116,19 +118,20 @@ textarea {
 
 .hidden { display: none; }
 
+/* ===== العد التنازلي ===== */
 #countdown {
     display: flex;
     gap: 20px;
-    font-size: 1.2rem;
+    font-size: 2rem; /* أكبر حجم */
     margin-bottom: 20px;
     position: relative;
-    z-index: 2; /* فوق overlay */
+    z-index: 2; 
 }
 #countdown div {
     text-align: center;
 }
 #countdown div div {
-    font-size: 1.5rem;
+    font-size: 2.5rem; /* أكبر رقم */
 }
 
 /* ===== Responsive إضافي ===== */
@@ -151,8 +154,6 @@ textarea {
 
 <!-- الصفحة الأولى -->
 <div id="opening" class="screen">
-    <div class="overlay"></div>
-
     <img src="logo.png" class="main-logo">
     
     <div id="countdown">
@@ -215,10 +216,12 @@ setInterval(() => {
 /* ===== الخلفيات ===== */
 const images = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 let imgIndex = 0;
-setInterval(() => {
+function changeBackground(){
     document.body.style.backgroundImage = `url(${images[imgIndex]})`;
     imgIndex = (imgIndex + 1) % images.length;
-}, 4000);
+}
+changeBackground(); // أول صورة فوراً بدون فلاش أسود
+setInterval(changeBackground, 4000);
 
 /* ===== الشرائح ===== */
 const slidesContent = [
@@ -298,7 +301,7 @@ function sendWhatsApp(){
     const msg = document.getElementById("msg").value;
     const text = `RSVP\nAttending: ${attend}\nGuests: ${guest}\nMessage: ${msg}`;
     window.open(`https://wa.me/96176059770?text=${encodeURIComponent(text)}`);
-    textSlides.innerHTML = "<h1>Thank you!</h1><p>We can't wait to celebrate with you</p>";
+    textSlides.innerHTML = "<h1>Thank you!</h1><p>We can't wait to celebrate with you</p><h1>🎉</h1>";
 }
 
 function goOpening(){
