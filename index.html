@@ -22,29 +22,42 @@ html, body {
 body {
     background-size: cover;
     background-position: center;
-    transition: background-image 1.5s ease-in-out;
     position: relative;
 }
 
-body::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background: inherit;
-    background-size: cover;
-    background-position:center;
-    animation: bgZoom 12s ease-in-out infinite alternate;
-    z-index:-1;
+.moving-bg{
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+.bg-track{
+    display: flex;
+    width: max-content;
+    height: 100%;
+    animation: moveBg 60s linear infinite;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.bg-track img{
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
-@keyframes bgZoom{
+@keyframes moveBg{
+
     from{
-        transform: scale(1);
+        transform: translateX(0);
     }
 
     to{
-        transform: scale(1.08);
+        transform: translateX(-500vw);
     }
+
 }
 
 /* ===== النصوص متجاوبة ===== */
@@ -82,7 +95,7 @@ button {
 button:hover {
     background: white;
     color: black;
-    transform: scale(1.05);
+    transform: scale(1.01);
 }
 
 .nav-buttons {
@@ -161,8 +174,9 @@ textarea {
     color: white;
     text-align: center;
     padding: 10px;
-
     animation: fadeIn 1s ease;
+
+    z-index: 2;
 }
 
 @keyframes fadeIn {
@@ -258,6 +272,23 @@ textarea {
 
 <body>
 
+<div class="moving-bg">
+    <div class="bg-track">
+        <img src="bg1.jpg">
+        <img src="bg2.jpg">
+        <img src="bg3.jpg">
+        <img src="bg4.jpg">
+        <img src="bg5.jpg">
+
+        <!-- تكرار للـ loop -->
+        <img src="bg1.jpg">
+        <img src="bg2.jpg">
+        <img src="bg3.jpg">
+        <img src="bg4.jpg">
+        <img src="bg5.jpg">
+    </div>
+</div>
+
 <!-- الصفحة الأولى -->
 <div id="opening" class="screen">
     <div class="overlay"></div>
@@ -321,14 +352,7 @@ setInterval(() => {
     }
 }, 1000);
 
-/* ===== الخلفيات ===== */
-const images = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
-let imgIndex = 0;
-document.body.style.backgroundImage = `url(${images[0]})`;
-setInterval(() => {
-    document.body.style.backgroundImage = `url(${images[imgIndex]})`;
-    imgIndex = (imgIndex + 1) % images.length;
-}, 4000);
+
 
 /* ===== الشرائح ===== */
 const slidesContent = [
