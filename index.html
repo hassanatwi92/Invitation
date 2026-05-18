@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hassan & Maha</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <style>
 html, body {
     margin: 0;
@@ -21,14 +23,35 @@ body {
     background-size: cover;
     background-position: center;
     transition: background-image 1.5s ease-in-out;
+    position: relative;
+}
+
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: inherit;
+    background-size: cover;
+    background-position:center;
+    animation: bgZoom 12s ease-in-out infinite alternate;
+    z-index:-1;
+}
+
+@keyframes bgZoom{
+    from{
+        transform: scale(1);
+    }
+
+    to{
+        transform: scale(1.08);
+    }
 }
 
 /* ===== النصوص متجاوبة ===== */
 h1 {
-    font-size: clamp(24px, 6vw, 50px);
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(50px, 10vw, 95px);
+    font-weight: normal;
 }
 
 h2 {
@@ -45,15 +68,21 @@ p {
 
 /* ===== الأزرار ===== */
 button {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid white;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.4);
     color: white;
     padding: 15px 35px;
-    font-size: 20px;
-    border-radius: 30px;
+    font-size: 18px;
+    border-radius: 40px;
     cursor: pointer;
-    z-index: 2;
-    position: relative;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+button:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
 }
 
 .nav-buttons {
@@ -91,7 +120,25 @@ textarea {
     display: block;
     margin: 0 auto;
     position: relative;
-    z-index: 2; /* فوق overlay */
+    z-index: 2;
+}
+
+.main-logo{
+    animation: floatLogo 4s ease-in-out infinite;
+}
+
+@keyframes floatLogo{
+    0%{
+        transform: translateY(0px);
+    }
+
+    50%{
+        transform: translateY(-10px);
+    }
+
+    100%{
+        transform: translateY(0px);
+    }
 }
 
 /* ===== overlay ===== */
@@ -99,8 +146,8 @@ textarea {
     position: absolute;
     inset: 0;
     background: rgba(0,0,0,0.35);
+
     z-index: 0;
-    pointer-events: none;
 }
 
 /* ===== شاشات ===== */
@@ -114,24 +161,83 @@ textarea {
     color: white;
     text-align: center;
     padding: 10px;
+
+    animation: fadeIn 1s ease;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 .hidden { display: none; }
 
-/* ===== العد التنازلي ===== */
+.slide-animation{
+    animation: slideFade 0.8s ease;
+}
+
+@keyframes slideFade{
+
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
 #countdown {
     display: flex;
-    gap: 20px;
-    font-size: 1.5rem; /* أكبر حجم */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     position: relative;
-    z-index: 2; 
+    z-index: 2;
 }
 #countdown div {
     text-align: center;
+    background: rgba(255,255,255,0.08);
+    padding: 10px;
+    border-radius: 18px;
+    min-width: 55px;
+    backdrop-filter: blur(5px);
+}
+
+@media (max-width: 480px) {
+
+    #countdown {
+        gap: 6px;
+    }
+
+    #countdown div {
+        min-width: 45px;
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    #countdown div div {
+        font-size: 1.1rem;
+    }
+
 }
 #countdown div div {
-    font-size: 2.5rem; /* أكبر رقم */
+    font-size: 1.5rem;
 }
 
 /* ===== Responsive إضافي ===== */
@@ -154,6 +260,8 @@ textarea {
 
 <!-- الصفحة الأولى -->
 <div id="opening" class="screen">
+    <div class="overlay"></div>
+
     <img src="logo.png" class="main-logo">
     
     <div id="countdown">
@@ -201,7 +309,7 @@ textarea {
 
 <script>
 /* ===== العد التنازلي ===== */
-const weddingDate = new Date("2026-04-26T20:00:00").getTime();
+const weddingDate = new Date("2026-06-07T20:00:00").getTime();
 setInterval(() => {
     const now = new Date().getTime();
     const d = weddingDate - now;
@@ -216,19 +324,18 @@ setInterval(() => {
 /* ===== الخلفيات ===== */
 const images = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 let imgIndex = 0;
-function changeBackground(){
+document.body.style.backgroundImage = `url(${images[0]})`;
+setInterval(() => {
     document.body.style.backgroundImage = `url(${images[imgIndex]})`;
     imgIndex = (imgIndex + 1) % images.length;
-}
-changeBackground(); // أول صورة فوراً بدون فلاش أسود
-setInterval(changeBackground, 4000);
+}, 4000);
 
 /* ===== الشرائح ===== */
 const slidesContent = [
 `<h2>Wedding Celebration</h2>
 <div style="font-size:60px; margin-bottom:10px;">🕖</div>
-<p>Sunday, 26/04/2026<br>8:00 PM<br>La Salle Venue - Saida</p>
-<button onclick="window.open('https://maps.app.goo.gl/CrUSkbyqZCosc2dJ9')">Open Map</button>`,
+<p>Sunday, 07/06/2026<br>8:00 PM<br>Crown Plaza - Beirut</p>
+<button onclick="window.open('https://maps.app.goo.gl/PPf1dw6QfzYKHFPn7?g_st=ic')">Open Map</button>`,
 
 `<div style="font-size:60px; margin-bottom:10px;">🎁</div>
 <h2>Gift Registry</h2>
@@ -255,6 +362,16 @@ const slidesContent = [
 let indexSlide = 0;
 const textSlides = document.getElementById("textSlides");
 
+function animateSlide(){
+
+    textSlides.classList.remove("slide-animation");
+
+    void textSlides.offsetWidth;
+
+    textSlides.classList.add("slide-animation");
+
+}
+
 function startSite(){
     opening.classList.add("hidden");
     content.classList.remove("hidden");
@@ -262,9 +379,15 @@ function startSite(){
 }
 
 function next(){
+
     content.classList.add("hidden");
+
     slides.classList.remove("hidden");
+
     textSlides.innerHTML = slidesContent[indexSlide];
+
+    animateSlide();
+
 }
 
 function prev(){
@@ -273,20 +396,37 @@ function prev(){
 }
 
 function nextSlide(){
+
     if(indexSlide < slidesContent.length-1){
+
         indexSlide++;
+
         textSlides.innerHTML = slidesContent[indexSlide];
+
+        animateSlide();
+
     }
+
 }
 
 function prevSlide(){
+
     if(indexSlide > 0){
+
         indexSlide--;
+
         textSlides.innerHTML = slidesContent[indexSlide];
+
+        animateSlide();
+
     } else {
+
         slides.classList.add("hidden");
+
         content.classList.remove("hidden");
+
     }
+
 }
 
 function showGuestOptions(show){
@@ -296,12 +436,38 @@ function showGuestOptions(show){
 }
 
 function sendWhatsApp(){
-    const attend = document.querySelector('input[name="attend"]:checked')?.value || "";
-    const guest = document.querySelector('input[name="guestOption"]:checked')?.value || "";
-    const msg = document.getElementById("msg").value;
-    const text = `RSVP\nAttending: ${attend}\nGuests: ${guest}\nMessage: ${msg}`;
-    window.open(`https://wa.me/96176059770?text=${encodeURIComponent(text)}`);
-    textSlides.innerHTML = "<h1>Thank you!</h1><p>We can't wait to celebrate with you</p><h1>🎉</h1>";
+
+    const attend =
+    document.querySelector('input[name="attend"]:checked')?.value || "";
+
+    const guest =
+    document.querySelector('input[name="guestOption"]:checked')?.value || "";
+
+    const msg =
+    document.getElementById("msg").value;
+
+    if(!attend){
+        alert("Please select attendance");
+        return;
+    }
+
+    if(attend === "Yes" && !guest){
+        alert("Please select number of guests");
+        return;
+    }
+
+    const text =
+`RSVP
+Attending: ${attend}
+Guests: ${guest}
+Message: ${msg}`;
+
+    window.open(
+`https://wa.me/96176059770?text=${encodeURIComponent(text)}`
+    );
+
+    textSlides.innerHTML =
+    "<h1>Thank you!</h1><p>We can't wait to celebrate with you</p>";
 }
 
 function goOpening(){
@@ -312,4 +478,3 @@ function goOpening(){
 
 </body>
 </html>
-
